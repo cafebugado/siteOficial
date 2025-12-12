@@ -7,6 +7,8 @@ import Blog from './pages/Blog.tsx';
 import ContactForm from './pages/ContactForm.tsx';
 import Challenges from './pages/Challenges.tsx';
 import { ThemeProvider } from './context/ThemeContext';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import './index.css';
@@ -51,6 +53,8 @@ root.render(
   <StrictMode>
     <ThemeProvider>
       {getPage()}
+      <Analytics />
+      <SpeedInsights />
     </ThemeProvider>
   </StrictMode>,
 );
