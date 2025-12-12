@@ -1,0 +1,221 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   CAFÉ BUGADO - STYLE GUIDE
+   ============================================ */
+
+:root {
+  /* Café Bugado Colors - Purple Palette */
+  --cb-purple: #8B5CF6;
+  --cb-purple-dark: #6D28D9;
+  --cb-purple-deep: #4C1D95;
+
+  /* Café Bugado Colors - Neutrals */
+  --cb-white-soft: #F8F8FA;
+  --cb-white: #FFFFFF;
+  --cb-gray-light: #E7E7EB;
+  --cb-gray: #C4C4C9;
+  --cb-gray-dark: #3A3A3F;
+  --cb-black-soft: #1A1A1D;
+
+  /* Café Bugado Colors - Accents */
+  --cb-pink: #F472B6;
+  --cb-blue: #60A5FA;
+  --cb-green: #34D399;
+  --cb-red: #EF4444;
+
+  /* Componentes - Cores específicas */
+  --badge-green-text: #059669;
+  --badge-red-text: #B91C1C;
+  --border-dark-subtle: #26262C;
+
+  /* Light Mode Theme */
+  --light-bg: #F8F8FA;
+  --light-card: #FFFFFF;
+  --light-text: #1A1A1D;
+  --light-action: #8B5CF6;
+
+  /* Dark Mode Theme */
+  --dark-bg: #0F0F12;
+  --dark-card: #18181C;
+  --dark-text: #F5F5F7;
+  --dark-action: #6D28D9;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #8B5CF6, #6D28D9);
+  --gradient-deep: linear-gradient(135deg, #6D28D9, #4C1D95);
+
+  /* Typography */
+  --font-heading: 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Font Sizes */
+  --text-h1: 2rem;        /* 32px */
+  --text-h2: 1.625rem;    /* 26px */
+  --text-h3: 1.375rem;    /* 22px */
+  --text-h4: 1.125rem;    /* 18px */
+  --text-large: 1rem;     /* 16px */
+  --text-body: 0.9375rem; /* 15px */
+  --text-label: 0.8125rem; /* 13px */
+  --text-button: 0.9375rem; /* 15px */
+
+  /* Spacing System (múltiplos de 4px) */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px - Listas */
+  --space-3: 0.75rem;   /* 12px - Componentes internos, botões */
+  --space-4: 1rem;      /* 16px - Gap padrão */
+  --space-5: 1.25rem;   /* 20px - Cards */
+  --space-6: 1.5rem;    /* 24px - Cards */
+  --space-8: 2rem;      /* 32px - Seções médias */
+  --space-10: 2.5rem;   /* 40px - Seções médias */
+  --space-12: 3rem;     /* 48px - Seções médias a grandes */
+  --space-16: 4rem;     /* 64px - Seções grandes */
+
+  /* Animation */
+  --animate-delay: 0.5s;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Animation Classes */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wordRotate {
+  0%, 16% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  20%, 96% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-typing {
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+  border-right: 2px solid;
+  width: 0;
+  animation: typing 3s steps(40, end) forwards;
+}
+
+.animate-float {
+  animation: float 15s ease-in-out infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 1s ease-in-out forwards;
+}
+
+.animate-wordRotate {
+  opacity: 0;
+  animation: wordRotate 12s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
+}
+
+.dark * {
+  scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+}
