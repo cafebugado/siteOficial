@@ -68,10 +68,10 @@ Este projeto ainda não possui uma licença definida. Entre em contato com os ma
 
 ## CI/CD e Fluxo de Desenvolvimento
 
-- Branches: `dev` (padrão, homologação) e `prod` (produção). Crie features a partir de `dev`; hotfixes a partir de `prod`.
+- Branches: `prod` (padrão, produção) e `dev` (homologação). Crie features a partir de `dev`; hotfixes a partir de `prod`.
 - Como começar uma feature: `git checkout dev && git pull && git checkout -b feature/minha-feature`. Desenvolva, rode `npm run lint && npm run build`, abra PR para `dev` (1 aprovação obrigatória). O workflow `CI` roda lint/build; se ok, faça merge via PR.
 - Deploy de homologação: merge/push em `dev` aciona `Deploy` no GitHub Actions, publica preview na Vercel.
-- Promover para produção: abra PR de `dev` → `prod` (ou `git checkout prod && git pull && git merge --no-ff dev`). Exige 1 aprovação + CI. Ao merge em `prod`, o `Deploy` publica produção na Vercel.
+- Promover para produção: abra PR de `dev` para `prod` (ou `git checkout prod && git pull && git merge --no-ff dev`). Exige 1 aprovação + CI. Ao merge em `prod`, o `Deploy` publica produção na Vercel.
 - Hotfix: `git checkout prod && git pull && git checkout -b hotfix/descricao`; PR para `prod`, depois back-merge de `prod` para `dev`.
 
 ### Workflows GitHub Actions
@@ -91,3 +91,4 @@ Este projeto ainda não possui uma licença definida. Entre em contato com os ma
 - Validar local: `npm run lint && npm run build`
 - Subir branch: `git push -u origin feature/minha-feature`
 - PR para dev → preview; PR para prod → produção
+
