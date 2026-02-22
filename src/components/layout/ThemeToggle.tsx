@@ -23,7 +23,7 @@ export default function ThemeToggle() {
             theme === 'dark' ? '-translate-y-full' : 'translate-y-0'
           }`}
         >
-          <Sun className="h-5 w-5 text-yellow-400" />
+          <Sun className="h-5 w-5 text-cb-purple" />
         </span>
       </div>
     </button>
