@@ -9,15 +9,18 @@ interface FeatureCardProps {
 
 function FeatureCard({ icon, title, description, delay }: FeatureCardProps) {
   return (
-    <div 
-      className="group p-6 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 hover:border-cyan-300 dark:hover:border-cyan-800 hover:shadow-lg dark:hover:shadow-cyan-900/20 transition-all transform hover:-translate-y-1 hover:bg-gradient-to-br hover:from-white hover:to-cyan-50 dark:hover:from-gray-800 dark:hover:to-gray-800/80 animate-fadeIn"
+    <div
+      className="group p-6 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 hover:border-cb-purple/50 dark:hover:border-cb-purple/40 hover:shadow-lg dark:hover:shadow-cb-purple/20 transition-all transform hover:-translate-y-1 hover:bg-gradient-to-br hover:from-white hover:to-cb-purple/5 dark:hover:from-gray-800 dark:hover:to-gray-800/80 animate-fadeIn"
       style={{ animationDelay: `${delay * 0.1}s` }}
     >
-      <div className="mb-4 p-3 rounded-lg bg-cyan-50 dark:bg-cyan-900/20 w-14 h-14 flex items-center justify-center text-cyan-500 dark:text-cyan-400 group-hover:bg-cyan-100 dark:group-hover:bg-cyan-900/30 transition-colors">
-        {icon}
+      {/* Ícone e título na mesma linha (mobile e desktop) */}
+      <div className="flex items-center gap-3 mb-2">
+        <div className="p-2 md:p-3 rounded-lg bg-cb-purple/10 dark:bg-cb-purple/20 w-9 h-9 md:w-14 md:h-14 flex items-center justify-center text-cb-purple dark:text-cb-purple group-hover:bg-cb-purple/20 dark:group-hover:bg-cb-purple/30 transition-colors shrink-0">
+          <span className="[&>svg]:w-4 [&>svg]:h-4 md:[&>svg]:w-7 md:[&>svg]:h-7">{icon}</span>
+        </div>
+        <h3 className="text-base md:text-xl font-semibold text-gray-900 dark:text-white">{title}</h3>
       </div>
-      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{title}</h3>
-      <p className="text-gray-600 dark:text-gray-300">{description}</p>
+      <p className="text-sm md:text-base text-gray-600 dark:text-gray-300">{description}</p>
     </div>
   );
 }
@@ -67,22 +70,23 @@ export default function Features() {
   ];
 
   return (
-    <section id="about" className="py-20 bg-gray-50 dark:bg-gray-900/50 relative overflow-hidden">
+    <section id="about" className="py-12 md:py-20 bg-gray-50 dark:bg-gray-900/50 relative overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0 opacity-5 dark:opacity-10">
         <div className="h-full w-full bg-[linear-gradient(to_right,#8882_1px,transparent_1px),linear-gradient(to_bottom,#8882_1px,transparent_1px)] bg-[size:24px_24px]"></div>
       </div>
       
       {/* Blob decorations */}
-      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-gradient-to-br from-cyan-500/30 to-purple-600/30 rounded-full blur-3xl opacity-30 dark:opacity-20"></div>
-      <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-br from-cyan-500/30 to-purple-600/30 rounded-full blur-3xl opacity-30 dark:opacity-20"></div>
+      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-48 h-48 md:w-96 md:h-96 bg-gradient-to-br from-cb-purple/30 to-cb-purple-dark/30 rounded-full blur-3xl opacity-30 dark:opacity-20"></div>
+      <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-48 h-48 md:w-96 md:h-96 bg-gradient-to-br from-cb-purple/30 to-cb-purple-dark/30 rounded-full blur-3xl opacity-30 dark:opacity-20"></div>
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-3xl mx-auto text-center mb-16 animate-fadeIn">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            O que você encontra no <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-purple-600">Café Bugado</span>
+        <div className="max-w-3xl mx-auto text-center mb-10 md:mb-16 animate-fadeIn">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <span className="block md:inline">O que você encontra no</span>{' '}
+            <span className="bg-clip-text text-transparent bg-gradient-primary">Café Bugado</span>
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300">
+          <p className="text-sm md:text-xl text-justify md:text-center text-gray-600 dark:text-gray-300">
             Muito mais que uma comunidade de tecnologia, somos um ponto de encontro para quem respira inovação.
           </p>
         </div>

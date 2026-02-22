@@ -7,52 +7,49 @@ Este documento lista todas as rotas disponíveis no site.
 | Rota | Descrição | Componente |
 |------|-----------|------------|
 | `/` | Página inicial com Hero e Features | [Home.tsx](src/pages/Home.tsx) |
-| `/eventos` | Página de eventos da comunidade | [Events.tsx](src/pages/Events.tsx) |
-| `/desafios` | Página com desafios de programação | [Challenges.tsx](src/pages/Challenges.tsx) |
-| `/blog` | Página com artigos e tutoriais | [Blog.tsx](src/pages/Blog.tsx) |
-| `/comunidade` | Página da comunidade | [Community.tsx](src/pages/Community.tsx) |
-| `/form` | Formulário de contato (Google Forms) | [ContactForm.tsx](src/pages/ContactForm.tsx) |
+| `/*` (qualquer outra) | Página 404 personalizada | [NotFound.tsx](src/pages/NotFound.tsx) |
+
+> **Nota:** Eventos, Desafios, Blog, Comunidade e Contato ainda não possuem páginas. Os itens do menu exibem um indicador de cadeado e tooltip "Em breve" ao serem clicados.
 
 ## 🧭 Navegação
 
-O menu de navegação está disponível no [Header](src/components/layout/Header.tsx) e contém os seguintes links:
+### Desktop
+Menu horizontal no header com os seguintes links:
 
 - **Início** → `/`
-- **Eventos** → `/eventos`
-- **Desafios** → `/desafios`
-- **Blog** → `/blog`
-- **Comunidade** → `/comunidade`
-- **Contato** → `/form`
+- **Eventos** → `#` (Em breve)
+- **Desafios** → `#` (Em breve)
+- **Blog** → `#` (Em breve)
+- **Comunidade** → `#` (Em breve)
+- **Contato** → `#` (Em breve)
+
+### Mobile
+Barra de navegação flutuante na parte inferior da tela (`fixed bottom-4`), com ícone + nome para cada item. Itens "Em breve" exibem um ícone de cadeado e, ao toque, mostram tooltip "Em breve" por 2 segundos.
 
 ## 🔧 Configuração
 
-As rotas são gerenciadas no arquivo [main.tsx](src/main.tsx) através de um sistema simples de roteamento baseado em `window.location.pathname`.
+As rotas são gerenciadas no arquivo [main.tsx](src/main.tsx) através de um sistema simples baseado em `window.location.pathname`.
 
 ### Como funciona:
 
 ```tsx
+const path = window.location.pathname;
+
 const getPage = () => {
-  const PageContent = () => {
-    switch (path) {
-      case '/eventos':
-        return <Events />;
-      case '/comunidade':
-        return <Community />;
-      case '/blog':
-        return <Blog />;
-      case '/desafios':
-        return <Challenges />;
-      case '/':
-      default:
-        return <Home />;
-    }
-  };
+  if (path !== '/') {
+    // Sem header/footer na 404
+    return (
+      <div className="min-h-screen bg-light-bg dark:bg-dark-bg ...">
+        <NotFound />
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-light-bg dark:bg-dark-bg ...">
       <Header />
       <main>
-        <PageContent />
+        <Home />
       </main>
       <Footer />
     </div>
@@ -60,42 +57,63 @@ const getPage = () => {
 };
 ```
 
+### Configuração da Vercel
+
+O arquivo [vercel.json](vercel.json) garante que rotas desconhecidas sejam servidas pelo `index.html`, preservando o pathname para que o JS identifique a rota 404:
+
+```json
+{
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/.*", "dest": "/index.html" }
+  ]
+}
+```
+
 ## ➕ Adicionando Novas Rotas
 
 Para adicionar uma nova rota:
 
 1. **Crie a página** em `src/pages/NomeDaPagina.tsx`
-2. **Adicione a rota** no switch case do `main.tsx`
-3. **Adicione o link** no array `navItems` do `Header.tsx`
+2. **Importe e adicione** no `main.tsx` dentro do `if` ou `switch`
+3. **Adicione o link** no array `navItems` do `Header.tsx` (remova o `badge` para ativar)
 
 ### Exemplo:
 
 ```tsx
-// 1. Criar src/pages/Sobre.tsx
-export default function Sobre() {
+// 1. Criar src/pages/Eventos.tsx
+export default function Eventos() {
   return (
     <div className="min-h-screen pt-20 pb-16">
-      <h1>Sobre Nós</h1>
+      <h1>Eventos</h1>
     </div>
   );
 }
 
 // 2. Importar e adicionar no main.tsx
-import Sobre from './pages/Sobre.tsx';
+import Eventos from './pages/Eventos.tsx';
 
-case '/sobre':
-  return <Sobre />;
+// Dentro de getPage(), antes do if (path !== '/'):
+if (path === '/eventos') {
+  return (
+    <div className="min-h-screen bg-light-bg dark:bg-dark-bg ...">
+      <Header />
+      <main><Eventos /></main>
+      <Footer />
+    </div>
+  );
+}
 
-// 3. Adicionar no Header.tsx
-{ name: 'Sobre', href: '/sobre' }
+// 3. No Header.tsx, remover o badge do item Eventos:
+{ name: 'Eventos', href: '/eventos', icon: Calendar }
+// (sem badge: 'Em breve')
 ```
 
 ## 📱 Responsividade
 
-Todas as rotas são responsivas e adaptam-se a diferentes tamanhos de tela:
-- Mobile: Menu hamburguer
-- Tablet/Desktop: Menu horizontal completo
+- **Mobile**: Barra flutuante no bottom com ícones (sem hamburger menu)
+- **Tablet/Desktop**: Menu horizontal no header
 
 ---
 
-**Última atualização:** 2025-12-03
+**Última atualização:** 2026-02-22

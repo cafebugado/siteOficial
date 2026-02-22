@@ -4,10 +4,14 @@ Este repositório contém o código-fonte do site oficial do **Café Bugado**, u
 
 ## ✨ Funcionalidades
 - Página inicial com animações e efeitos de luz interativos
-- Seções dedicadas para features, eventos, comunidade, blog e contato
-- Formulário de contato com feedback visual de envio
+- Grid de features com cards responsivos
+- Modal "Entrar na Comunidade" com links para Discord, WhatsApp e Telegram
 - Alternância entre tema claro e escuro
-- Layout responsivo construído com Tailwind CSS
+- Layout totalmente responsivo (mobile-first)
+- Navegação mobile: barra flutuante na parte inferior com ícones e tooltip "Em breve"
+- Página 404 personalizada (sem header/footer) com terminal decorativo
+- Scrollbar customizada roxa e fina
+- Background com cor do projeto desde o carregamento (sem flash branco)
 
 ## 🛠️ Tecnologias
 - [React](https://react.dev) + [Vite](https://vitejs.dev)
@@ -19,12 +23,16 @@ Este repositório contém o código-fonte do site oficial do **Café Bugado**, u
 ```
 src/
 ├── components/
-│   ├── layout/      # Cabeçalho, rodapé e toggle de tema
-│   └── home/        # Seções da página inicial (Hero, Eventos, Blog…)
-├── context/         # Provedor de tema
-├── App.tsx          # Composição das seções
-├── main.tsx         # Entrada da aplicação
-└── index.css        # Estilos globais
+│   ├── layout/      # Header (com nav mobile flutuante), Footer e ThemeToggle
+│   ├── home/        # Hero (com modal de comunidade) e Features (cards)
+│   └── ui/          # Button, LinkButton e exports
+├── context/         # ThemeContext (dark/light mode)
+├── pages/
+│   ├── Home.tsx     # Página inicial
+│   └── NotFound.tsx # Página 404 personalizada
+├── tokens/          # Design tokens (cores, tipografia, espaçamento)
+├── main.tsx         # Entrada e roteamento por pathname
+└── index.css        # Estilos globais, animações e scrollbar customizada
 ```
 
 ## 🚀 Começando

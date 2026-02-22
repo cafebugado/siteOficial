@@ -1,11 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import Home from './pages/Home.tsx';
-import Events from './pages/Events.tsx';
-import Community from './pages/Community.tsx';
-import Blog from './pages/Blog.tsx';
-import ContactForm from './pages/ContactForm.tsx';
-import Challenges from './pages/Challenges.tsx';
+import NotFound from './pages/NotFound.tsx';
 import { ThemeProvider } from './context/ThemeContext';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
@@ -18,31 +14,19 @@ const root = createRoot(rootElement);
 const path = window.location.pathname;
 
 const getPage = () => {
-  // Páginas sem layout completo
-  if (path === '/form') return <ContactForm />;
-
-  // Páginas com layout completo
-  const PageContent = () => {
-    switch (path) {
-      case '/eventos':
-        return <Events />;
-      case '/comunidade':
-        return <Community />;
-      case '/blog':
-        return <Blog />;
-      case '/desafios':
-        return <Challenges />;
-      case '/':
-      default:
-        return <Home />;
-    }
-  };
+  if (path !== '/') {
+    return (
+      <div className="min-h-screen bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text transition-colors duration-300">
+        <NotFound />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text transition-colors duration-300">
       <Header />
       <main>
-        <PageContent />
+        <Home />
       </main>
       <Footer />
     </div>
