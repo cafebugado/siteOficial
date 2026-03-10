@@ -9,6 +9,7 @@ import {
 } from '@tanstack/react-router';
 import Home from './pages/Home.tsx';
 import ContactPage from './pages/ContactPage.tsx';
+import EventsPage from './pages/EventsPage.tsx';
 import NotFound from './pages/NotFound.tsx';
 import { ThemeProvider } from './context/ThemeContext';
 import { Analytics } from '@vercel/analytics/react';
@@ -46,13 +47,19 @@ const contatoRoute = createRoute({
   component: ContactPage,
 });
 
+const eventosRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/eventos',
+  component: EventsPage,
+});
+
 const notFoundRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '*',
   component: NotFound,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, contatoRoute, notFoundRoute]);
+const routeTree = rootRoute.addChildren([indexRoute, contatoRoute, eventosRoute, notFoundRoute]);
 
 const router = createRouter({ routeTree });
 
