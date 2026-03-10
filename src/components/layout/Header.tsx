@@ -19,7 +19,7 @@ export default function Header() {
 
   const navItems = [
     { name: 'Início', href: '/', icon: Home },
-    { name: 'Eventos', href: '#', badge: 'Em breve', icon: Calendar },
+    { name: 'Eventos', href: '/eventos', icon: Calendar },
     { name: 'Desafios', href: '#', badge: 'Em breve', icon: Zap },
     { name: 'Blog', href: '#', badge: 'Em breve', icon: BookOpen },
     { name: 'Comunidade', href: '#', badge: 'Em breve', icon: Users },
@@ -66,6 +66,15 @@ export default function Header() {
                     <span className="absolute -top-5 left-1/2 -translate-x-1/2 px-2 py-0.5 text-[10px] font-semibold rounded-full bg-cb-purple text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                       {item.badge}
                     </span>
+                    {item.name}
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-cb-purple group-hover:w-full transition-all duration-300"></span>
+                  </a>
+                ) : item.href.includes('#') ? (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className={linkClass(item.href)}
+                  >
                     {item.name}
                     <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-cb-purple group-hover:w-full transition-all duration-300"></span>
                   </a>
@@ -116,6 +125,19 @@ export default function Header() {
                   <Icon className="w-5 h-5" />
                   <span className="text-[10px] font-medium leading-none">{item.name}</span>
                 </button>
+              );
+            }
+
+            if (item.href.includes('#')) {
+              return (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="relative flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl transition-all text-cb-gray-dark dark:text-cb-gray hover:text-cb-purple dark:hover:text-cb-purple hover:bg-cb-purple/10"
+                >
+                  <Icon className="w-5 h-5" />
+                  <span className="text-[10px] font-medium leading-none">{item.name}</span>
+                </a>
               );
             }
 
