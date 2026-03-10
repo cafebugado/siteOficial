@@ -1,161 +1,300 @@
-import React from 'react';
-import { Calendar, MapPin, Clock, Users, ArrowRight, ExternalLink } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Calendar, CalendarDays, Clock, MapPin, ExternalLink, Monitor, Users } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
 
-interface EventCardProps {
-  title: string;
-  date: string;
-  location: string;
-  time: string;
-  attendees: number;
-  image: string;
-  tag: string;
-  link: string;
-  delay: number;
+interface Tag {
+  id: string;
+  nome: string;
+  cor: string;
 }
 
-function EventCard({ title, date, location, time, attendees, image, tag, link, delay }: EventCardProps) {
+interface Evento {
+  id: string;
+  nome: string;
+  descricao: string | null;
+  data_evento: string;
+  horario: string;
+  dia_semana: string | null;
+  periodo: string | null;
+  link: string | null;
+  imagem: string | null;
+  modalidade: string | null;
+  endereco: string | null;
+  cidade: string | null;
+  estado: string | null;
+  tags: Tag[];
+}
+
+function parseEventDate(dateStr: string): Date {
+  if (!dateStr) return new Date(0);
+  const [day, month, year] = dateStr.split('/');
+  return new Date(Number(year), Number(month) - 1, Number(day));
+}
+
+function formatDateDisplay(dateStr: string): string {
+  const date = parseEventDate(dateStr);
+  return date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function formatTime(timeStr: string): string {
+  if (!timeStr) return '';
+  return timeStr.slice(0, 5);
+}
+
+function getEventDateLabel(dateStr: string): string | null {
+  const date = parseEventDate(dateStr);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const diff = Math.round((date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+  if (diff === 0) return 'Hoje';
+  if (diff === 1) return 'Amanhã';
+  if (diff <= 6) return date.toLocaleDateString('pt-BR', { weekday: 'long' }).replace(/^\w/, (c) => c.toUpperCase());
+  return null;
+}
+
+const EVENTOS_BASE_URL = import.meta.env.VITE_EVENTOS_BASE_URL as string;
+
+const periodoLabel: Record<string, string> = {
+  Matinal: 'Manhã',
+  Diurno: 'Dia todo',
+  Vespertino: 'Tarde',
+  Noturno: 'Noite',
+};
+
+const modalidadeIcon = {
+  Online: <Monitor className="w-3.5 h-3.5" />,
+  Presencial: <Users className="w-3.5 h-3.5" />,
+  Híbrido: <Users className="w-3.5 h-3.5" />,
+};
+
+function EventCard({ event }: { event: Evento }) {
+  const dateLabel = getEventDateLabel(event.data_evento);
+  const eventoUrl = `${EVENTOS_BASE_URL}/eventos/${event.id}`;
+
   return (
-    <div 
-      className="group rounded-xl overflow-hidden bg-white dark:bg-gray-800 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 animate-fadeIn"
-      style={{ animationDelay: `${delay * 0.1}s` }}
-    >
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
-        <img 
-          src={image} 
-          alt={title} 
-          className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-500"
-        />
-        <div className="absolute top-3 left-3 z-20">
-          <span className="px-2 py-1 text-xs font-medium rounded-full bg-cyan-500 text-white">
-            {tag}
-          </span>
+    <a
+      href={eventoUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex flex-col h-full rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 hover:border-cb-purple/50 dark:hover:border-cb-purple/40 hover:shadow-lg dark:hover:shadow-cb-purple/20 transition-all hover:-translate-y-1 overflow-hidden animate-fadeIn">
+      {/* Imagem */}
+      {event.imagem ? (
+        <div className="relative h-44 overflow-hidden bg-gray-100 dark:bg-gray-700 shrink-0">
+          <img
+            src={event.imagem}
+            alt={event.nome}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+          {dateLabel && (
+            <span className={`absolute top-3 left-3 px-2 py-0.5 text-xs font-semibold rounded-full text-white ${dateLabel === 'Hoje' ? 'bg-cb-purple animate-pulse' : 'bg-cb-purple/80'}`}>
+              {dateLabel}
+            </span>
+          )}
         </div>
-        <div className="absolute bottom-3 left-3 z-20">
-          <h3 className="text-xl font-bold text-white">{title}</h3>
+      ) : (
+        <div className="relative h-44 shrink-0 bg-gradient-to-br from-cb-purple/20 to-cb-purple-dark/20 flex items-center justify-center">
+          <Calendar className="w-12 h-12 text-cb-purple/40" />
+          {dateLabel && (
+            <span className={`absolute top-3 left-3 px-2 py-0.5 text-xs font-semibold rounded-full text-white ${dateLabel === 'Hoje' ? 'bg-cb-purple animate-pulse' : 'bg-cb-purple/80'}`}>
+              {dateLabel}
+            </span>
+          )}
         </div>
+      )}
+
+      {/* Conteúdo */}
+      <div className="flex flex-col flex-1 p-5 gap-3">
+        {/* Tags — sempre exibe ao menos "Tech" */}
+        <div className="flex flex-wrap gap-1.5 min-h-[22px]">
+          {event.tags.length > 0 ? event.tags.map((tag) => (
+            <span
+              key={tag.id}
+              className="px-2 py-0.5 text-xs font-medium rounded-full text-white bg-cb-purple"
+            >
+              {tag.nome}
+            </span>
+          )) : (
+            <span className="px-2 py-0.5 text-xs font-medium rounded-full text-white bg-cb-purple">
+              Tech
+            </span>
+          )}
+        </div>
+
+        {/* Título */}
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white leading-snug line-clamp-2 min-h-[2.75rem]">
+          {event.nome}
+        </h3>
+
+        {/* Metadados */}
+        <div className="flex flex-col gap-1.5 mt-auto text-xs text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-1.5">
+            <Calendar className="w-3.5 h-3.5 shrink-0 text-cb-purple" />
+            <span>{formatDateDisplay(event.data_evento)}</span>
+          </div>
+
+          {event.dia_semana && (
+            <div className="flex items-center gap-1.5">
+              <CalendarDays className="w-3.5 h-3.5 shrink-0 text-cb-purple" />
+              <span>{event.dia_semana}</span>
+            </div>
+          )}
+
+          <div className="flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5 shrink-0 text-cb-purple" />
+            <span>
+              {formatTime(event.horario)}
+              {event.periodo && ` · ${periodoLabel[event.periodo] ?? event.periodo}`}
+            </span>
+          </div>
+
+          {event.modalidade && (
+            <div className="flex items-center gap-1.5">
+              <span className="text-cb-purple">
+                {modalidadeIcon[event.modalidade as keyof typeof modalidadeIcon] ?? <Monitor className="w-3.5 h-3.5" />}
+              </span>
+              <span>{event.modalidade}</span>
+            </div>
+          )}
+
+          {event.cidade && (
+            <div className="flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 shrink-0 text-cb-purple" />
+              <span>{event.cidade}{event.estado ? `/${event.estado}` : ''}</span>
+            </div>
+          )}
+        </div>
+
+        {/* CTA */}
+        <span className="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-cb-purple group-hover:text-cb-purple-dark transition-colors">
+          Ver evento
+          <ExternalLink className="w-3.5 h-3.5" />
+        </span>
       </div>
-      
-      <div className="p-5 space-y-4">
-        <div className="flex flex-col space-y-2">
-          <div className="flex items-center text-gray-600 dark:text-gray-300">
-            <Calendar className="w-4 h-4 mr-2 text-cyan-500" />
-            <span>{date}</span>
-          </div>
-          <div className="flex items-center text-gray-600 dark:text-gray-300">
-            <MapPin className="w-4 h-4 mr-2 text-cyan-500" />
-            <span>{location}</span>
-          </div>
-          <div className="flex items-center text-gray-600 dark:text-gray-300">
-            <Clock className="w-4 h-4 mr-2 text-cyan-500" />
-            <span>{time}</span>
-          </div>
-          <div className="flex items-center text-gray-600 dark:text-gray-300">
-            <Users className="w-4 h-4 mr-2 text-cyan-500" />
-            <span>{attendees} participantes</span>
-          </div>
-        </div>
-        
-        <div className="pt-2">
-          <a 
-            href={link}
-            className="inline-flex items-center text-cyan-600 dark:text-cyan-400 font-medium group-hover:text-cyan-700 dark:group-hover:text-cyan-300 transition-colors"
-          >
-            Saiba mais
-            <ExternalLink className="ml-1 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-          </a>
-        </div>
-      </div>
-    </div>
+    </a>
   );
 }
 
+const PAGE_SIZE = 9;
+
 export default function Events() {
-  const events = [
-    {
-      title: "Workshop: React Avançado",
-      date: "25 de Outubro, 2025",
-      location: "Online",
-      time: "19:00 - 21:00",
-      attendees: 120,
-      image: "https://images.pexels.com/photos/7108/notebook-computer-chill-relax.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      tag: "Workshop",
-      link: "#"
-    },
-    {
-      title: "Meetup: DevOps na Prática",
-      date: "10 de Novembro, 2025",
-      location: "São Paulo, SP",
-      time: "18:30 - 21:30",
-      attendees: 85,
-      image: "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      tag: "Meetup",
-      link: "#"
-    },
-    {
-      title: "Hackathon: Soluções Sustentáveis",
-      date: "05-07 de Dezembro, 2025",
-      location: "Rio de Janeiro, RJ",
-      time: "Fim de semana",
-      attendees: 200,
-      image: "https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      tag: "Hackathon",
-      link: "#"
-    },
-    {
-      title: "Palestra: IA e o Futuro do Desenvolvimento",
-      date: "15 de Janeiro, 2026",
-      location: "Online",
-      time: "20:00 - 21:30",
-      attendees: 350,
-      image: "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      tag: "Palestra",
-      link: "#"
+  const [events, setEvents] = useState<Evento[]>([]);
+  const [visible, setVisible] = useState(PAGE_SIZE);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const [eventsRes, tagsRes] = await Promise.all([
+          supabase.from('eventos').select('*').order('data_evento', { ascending: true }),
+          supabase.from('evento_tags').select('evento_id, tags(id, nome, cor)'),
+        ]);
+
+        if (eventsRes.error) throw eventsRes.error;
+        if (tagsRes.error) throw tagsRes.error;
+
+        const tagsMap: Record<string, Tag[]> = {};
+        for (const row of tagsRes.data as { evento_id: string; tags: Tag }[]) {
+          if (!tagsMap[row.evento_id]) tagsMap[row.evento_id] = [];
+          tagsMap[row.evento_id].push(row.tags);
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const upcoming = eventsRes.data
+          .filter((e) => parseEventDate(e.data_evento) >= today)
+          .sort((a, b) => parseEventDate(a.data_evento).getTime() - parseEventDate(b.data_evento).getTime())
+          .map((e) => ({ ...e, tags: tagsMap[e.id] || [] }));
+
+        setEvents(upcoming);
+      } catch {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
     }
-  ];
+
+    load();
+  }, []);
 
   return (
-    <section id="events" className="py-20 bg-white dark:bg-gray-900 relative overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-gray-50 to-transparent dark:from-gray-900/50 dark:to-transparent"></div>
-      
+    <section id="eventos" className="py-12 md:py-20 bg-white dark:bg-dark-bg relative overflow-hidden">
+      {/* Background grid */}
+      <div className="absolute inset-0 opacity-5 dark:opacity-10">
+        <div className="h-full w-full bg-[linear-gradient(to_right,#8882_1px,transparent_1px),linear-gradient(to_bottom,#8882_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      </div>
+
+      {/* Blob decorations */}
+      <div className="absolute top-0 left-0 -translate-y-1/2 -translate-x-1/2 w-48 h-48 md:w-96 md:h-96 bg-gradient-to-br from-cb-purple/30 to-cb-purple-dark/30 rounded-full blur-3xl opacity-30 dark:opacity-20 pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 translate-y-1/2 translate-x-1/2 w-48 h-48 md:w-96 md:h-96 bg-gradient-to-br from-cb-purple/30 to-cb-purple-dark/30 rounded-full blur-3xl opacity-30 dark:opacity-20 pointer-events-none"></div>
+
       <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
-          <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 animate-fadeIn">
-              Próximos <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-purple-600">Eventos</span>
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 animate-fadeIn" style={{ animationDelay: '0.1s' }}>
-              Participe dos nossos eventos e conecte-se com a comunidade. Workshops, meetups, hackathons e muito mais!
-            </p>
+        {/* Header */}
+        <div className="max-w-3xl mx-auto text-center mb-10 md:mb-16 animate-fadeIn">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <span className="block md:inline">Próximos</span>{' '}
+            <span className="bg-clip-text text-transparent bg-gradient-primary">Eventos</span>
+          </h2>
+          <p className="text-sm md:text-xl text-center text-gray-600 dark:text-gray-300">
+            Fique por dentro dos eventos da comunidade e não perca nenhuma novidade.
+          </p>
+        </div>
+
+        {/* Estados */}
+        {loading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="rounded-xl bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 overflow-hidden animate-pulse">
+                <div className="h-44 bg-gray-200 dark:bg-gray-700" />
+                <div className="p-5 space-y-3">
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full" />
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3" />
+                </div>
+              </div>
+            ))}
           </div>
-          
-          <a 
-            href="#" 
-            className="mt-4 md:mt-0 inline-flex items-center px-4 py-2 bg-transparent border border-gray-300 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors group animate-fadeIn"
-            style={{ animationDelay: '0.2s' }}
-          >
-            Ver todos os eventos
-            <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </a>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {events.map((event, index) => (
-            <EventCard 
-              key={index}
-              title={event.title}
-              date={event.date}
-              location={event.location}
-              time={event.time}
-              attendees={event.attendees}
-              image={event.image}
-              tag={event.tag}
-              link={event.link}
-              delay={index}
-            />
-          ))}
-        </div>
+        )}
+
+        {!loading && error && (
+          <p className="text-center text-gray-500 dark:text-gray-400">
+            Não foi possível carregar os eventos. Tente novamente mais tarde.
+          </p>
+        )}
+
+        {!loading && !error && events.length === 0 && (
+          <p className="text-center text-gray-500 dark:text-gray-400">
+            Nenhum evento disponível no momento. Fique ligado!
+          </p>
+        )}
+
+        {!loading && !error && events.length > 0 && (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+              {events.slice(0, visible).map((event, index) => (
+                <div key={event.id} className="h-full" style={{ animationDelay: `${index * 0.08}s` }}>
+                  <EventCard event={event} />
+                </div>
+              ))}
+            </div>
+
+            {visible < events.length && (
+              <div className="flex justify-center mt-10">
+                <a
+                  href={`${EVENTOS_BASE_URL}/eventos`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-cb-purple/40 text-cb-purple font-semibold text-sm hover:bg-cb-purple hover:text-white transition-all duration-200"
+                >
+                  Ver mais eventos
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </section>
   );
