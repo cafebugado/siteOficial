@@ -1,4 +1,4 @@
-import { StrictMode } from 'react';
+import { StrictMode, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   createRouter,
@@ -6,6 +6,7 @@ import {
   createRootRoute,
   RouterProvider,
   Outlet,
+  useRouterState,
 } from '@tanstack/react-router';
 import Home from './pages/Home.tsx';
 import ContactPage from './pages/ContactPage.tsx';
@@ -19,10 +20,20 @@ import Footer from './components/layout/Footer';
 import { Toaster } from 'sonner';
 import './index.css';
 
+// Scroll para o topo ao mudar de rota
+function ScrollToTop() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [pathname]);
+  return null;
+}
+
 // Layout raiz com Header e Footer
 function RootLayout() {
   return (
     <div className="min-h-screen bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text transition-colors duration-300">
+      <ScrollToTop />
       <Header />
       <main>
         <Outlet />
