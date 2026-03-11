@@ -6,3 +6,5 @@ export type { ButtonVariant, ButtonSize } from './Button';
 
 export { default as LinkButton } from './LinkButton';
 export type { LinkButtonVariant, LinkButtonSize } from './LinkButton';
+
+export { default as ContactModal } from './ContactModal';
