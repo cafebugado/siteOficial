@@ -1,8 +1,32 @@
-import { Github, Linkedin, Mail, Heart } from 'lucide-react';
-import { LinkButton } from '../ui';
+import { useState, useEffect } from 'react';
+import { Github, Linkedin, Mail, Heart, Lock, ArrowUp } from 'lucide-react';
+import { useRouter, Link } from '@tanstack/react-router';
+import { ContactModal } from '../ui';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 300);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleEnviarMensagem = () => {
+    const isOnContato = router.state.location.pathname === '/contato';
+    if (isOnContato) {
+      const formHeading = document.getElementById('fale-com-a-comunidade');
+      if (formHeading) {
+        formHeading.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        formHeading.focus();
+      }
+    } else {
+      setIsModalOpen(true);
+    }
+  };
 
   return (
     <footer className="relative bg-gray-50 dark:bg-gray-900 pt-10 pb-24 md:pt-16 md:pb-10 overflow-hidden">
@@ -54,11 +78,29 @@ export default function Footer() {
           <div className="hidden md:block space-y-4">
             <h3 className="font-bold text-gray-800 dark:text-gray-100">Navegação</h3>
             <ul className="space-y-2">
-              {['Início', 'Sobre', 'Eventos', 'Blog', 'Comunidade', 'Contato'].map(item => (
-                <li key={item}>
-                  <a href={`#${item.toLowerCase()}`} className="text-gray-600 hover:text-cb-purple dark:text-gray-400 dark:hover:text-cb-purple transition-colors">
-                    {item}
-                  </a>
+              {[
+                { name: 'Início', href: '/' },
+                { name: 'Sobre', href: null },
+                { name: 'Eventos', href: '/eventos' },
+                { name: 'Blog', href: null },
+                { name: 'Comunidade', href: null },
+                { name: 'Contato', href: '/contato' },
+              ].map(item => (
+                <li key={item.name}>
+                  {item.href ? (
+                    <Link
+                      to={item.href}
+                      className="text-gray-600 hover:text-cb-purple dark:text-gray-400 dark:hover:text-cb-purple transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <span className="group inline-flex items-center gap-1.5 text-gray-400 dark:text-gray-600 cursor-default select-none">
+                      {item.name}
+                      <Lock className="w-3 h-3" />
+                      <span className="text-xs font-medium text-cb-purple/70 opacity-0 group-hover:opacity-100 transition-opacity duration-200">Em breve</span>
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
@@ -67,11 +109,30 @@ export default function Footer() {
           <div className="hidden md:block space-y-4">
             <h3 className="font-bold text-gray-800 dark:text-gray-100">Recursos</h3>
             <ul className="space-y-2">
-              {['Artigos', 'Tutoriais', 'Podcast', 'Newsletter', 'Vagas'].map(item => (
-                <li key={item}>
-                  <a href="#" className="text-gray-600 hover:text-cb-purple dark:text-gray-400 dark:hover:text-cb-purple transition-colors">
-                    {item}
-                  </a>
+              {[
+                { name: 'Artigos', href: null },
+                { name: 'Tutoriais', href: null },
+                { name: 'Podcast', href: 'https://www.youtube.com/@MaiconGerardi/podcasts' },
+                { name: 'Newsletter', href: null },
+                { name: 'Vagas', href: null },
+              ].map(item => (
+                <li key={item.name}>
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-600 hover:text-cb-purple dark:text-gray-400 dark:hover:text-cb-purple transition-colors"
+                    >
+                      {item.name}
+                    </a>
+                  ) : (
+                    <span className="group inline-flex items-center gap-1.5 text-gray-400 dark:text-gray-600 cursor-default select-none">
+                      {item.name}
+                      <Lock className="w-3 h-3" />
+                      <span className="text-xs font-medium text-cb-purple/70 opacity-0 group-hover:opacity-100 transition-opacity duration-200">Em breve</span>
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
@@ -83,9 +144,12 @@ export default function Footer() {
               Fala com a gente! <br />
               Dúvidas, sugestões ou ideias malucas? Estamos aqui pra ouvir você. Bora conversar!
             </p>
-            <LinkButton href="mailto:comunidade.cafebugado@gmail.com" variant="primary" size="sm" external>
+            <button
+              onClick={handleEnviarMensagem}
+              className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-primary text-white text-sm font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+            >
               Enviar mensagem
-            </LinkButton>
+            </button>
           </div>
         </div>
 
@@ -99,6 +163,18 @@ export default function Footer() {
           <p>© {currentYear} Café Bugado</p>
         </div>
       </div>
+      <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
+      {/* Botão voltar ao topo */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-20 right-4 md:bottom-8 md:right-6 z-40 flex items-center justify-center w-10 h-10 rounded-full bg-cb-purple text-white shadow-lg hover:bg-cb-purple-dark hover:-translate-y-0.5 transition-all duration-200"
+          aria-label="Voltar ao topo"
+        >
+          <ArrowUp className="w-5 h-5" />
+        </button>
+      )}
     </footer>
   );
 }
