@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from '@tanstack/react-router';
 import { Github, Linkedin, MapPin, Briefcase, Search, Filter } from 'lucide-react';
 
 function WhatsappIcon({ className }: { className?: string }) {
@@ -83,9 +82,8 @@ function MemberCard({ member }: { member: Member }) {
       <div className="h-1.5 bg-cb-purple w-0 group-hover:w-full transition-all duration-500" />
 
       {/* Link cobre o card inteiro, exceto os botões de ação */}
-      <Link
-        to="/comunidade/$id"
-        params={{ id: member.id }}
+      <a
+        href={`/comunidade/${member.id}`}
         className="absolute inset-0 z-0"
         aria-label={`Ver perfil de ${member.full_name}`}
       />

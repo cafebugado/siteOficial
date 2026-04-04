@@ -1,104 +1,62 @@
-import { StrictMode, useEffect } from 'react';
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import {
-  createRouter,
-  createRoute,
-  createRootRoute,
-  RouterProvider,
-  Outlet,
-  useRouterState,
-} from '@tanstack/react-router';
 import Home from './pages/Home.tsx';
-import ContactPage from './pages/ContactPage.tsx';
-import EventsPage from './pages/EventsPage.tsx';
+import Events from './pages/Events.tsx';
+import Community from './pages/Community.tsx';
+import Blog from './pages/Blog.tsx';
+import ContactForm from './pages/ContactForm.tsx';
+import Challenges from './pages/Challenges.tsx';
 import CommunityPage from './pages/CommunityPage.tsx';
 import MemberProfilePage from './pages/MemberProfilePage.tsx';
-import NotFound from './pages/NotFound.tsx';
 import { ThemeProvider } from './context/ThemeContext';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
-import { Toaster } from 'sonner';
 import './index.css';
 
-// Scroll para o topo ao mudar de rota
-function ScrollToTop() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [pathname]);
-  return null;
-}
+const rootElement = document.getElementById('root')!;
+const root = createRoot(rootElement);
+const path = window.location.pathname;
 
-// Layout raiz com Header e Footer
-function RootLayout() {
+const getPage = () => {
+  if (path === '/form') return <ContactForm />;
+
+  const PageContent = () => {
+    switch (path) {
+      case '/eventos':
+        return <Events />;
+      case '/comunidade':
+        return <CommunityPage />;
+      case '/blog':
+        return <Blog />;
+      case '/desafios':
+        return <Challenges />;
+      case '/':
+      default:
+        if (path.startsWith('/comunidade/')) {
+          const id = path.replace('/comunidade/', '');
+          return <MemberProfilePage id={id} />;
+        }
+        return <Home />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text transition-colors duration-300">
-      <ScrollToTop />
       <Header />
       <main>
-        <Outlet />
+        <PageContent />
       </main>
       <Footer />
     </div>
   );
-}
+};
 
-// Rotas
-const rootRoute = createRootRoute({ component: RootLayout });
-
-const indexRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/',
-  component: Home,
-});
-
-const contatoRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/contato',
-  component: ContactPage,
-});
-
-const eventosRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/eventos',
-  component: EventsPage,
-});
-
-const notFoundRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '*',
-  component: NotFound,
-});
-
-const comunidadeRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/comunidade',
-  component: CommunityPage,
-});
-
-const membroRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/comunidade/$id',
-  component: MemberProfilePage,
-});
-
-const routeTree = rootRoute.addChildren([indexRoute, contatoRoute, eventosRoute, comunidadeRoute, membroRoute, notFoundRoute]);
-
-const router = createRouter({ routeTree });
-
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router;
-  }
-}
-
-createRoot(document.getElementById('root')!).render(
+root.render(
   <StrictMode>
     <ThemeProvider>
-      <RouterProvider router={router} />
-      <Toaster position="top-right" richColors closeButton />
+      {getPage()}
       <Analytics />
       <SpeedInsights />
     </ThemeProvider>

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from '@tanstack/react-router';
 import { Github, Linkedin, MapPin, Briefcase, ArrowLeft, ExternalLink } from 'lucide-react';
 import { supabaseCommunity } from '../lib/supabaseCommunity';
 
@@ -54,8 +53,7 @@ function formatWhatsapp(raw: string): string {
   return raw.replace(/\D/g, '');
 }
 
-export default function MemberProfilePage() {
-  const { id } = useParams({ strict: false }) as { id: string };
+export default function MemberProfilePage({ id }: { id: string }) {
   const [member, setMember] = useState<Member | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -91,9 +89,9 @@ export default function MemberProfilePage() {
     return (
       <div className="min-h-screen pt-24 pb-20 bg-light-bg dark:bg-dark-bg flex flex-col items-center justify-center gap-4">
         <p className="text-lg text-cb-gray-dark dark:text-cb-gray">Membro não encontrado.</p>
-        <Link to="/comunidade" className="text-cb-purple hover:underline flex items-center gap-1">
+        <a href="/comunidade" className="text-cb-purple hover:underline flex items-center gap-1">
           <ArrowLeft className="w-4 h-4" /> Voltar para a comunidade
-        </Link>
+        </a>
       </div>
     );
   }
@@ -104,13 +102,13 @@ export default function MemberProfilePage() {
     <div className="min-h-screen pt-24 pb-20 bg-light-bg dark:bg-dark-bg">
       <div className="max-w-2xl mx-auto px-4 sm:px-6">
         {/* Voltar */}
-        <Link
-          to="/comunidade"
+        <a
+          href="/comunidade"
           className="inline-flex items-center gap-1.5 text-sm text-cb-gray-dark dark:text-cb-gray hover:text-cb-purple dark:hover:text-cb-purple transition-colors mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
           Voltar para a comunidade
-        </Link>
+        </a>
 
         {/* Card de perfil */}
         <div className="bg-white dark:bg-dark-card rounded-2xl border border-cb-gray-light dark:border-[#26262C] overflow-hidden shadow-sm">
