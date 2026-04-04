@@ -19,7 +19,7 @@ export default function Header() {
     { name: 'Desafios', href: '#', badge: 'Em breve', icon: Zap },
     { name: 'Blog', href: '#', badge: 'Em breve', icon: BookOpen },
     { name: 'Comunidade', href: '/comunidade', icon: Users },
-    { name: 'Contato', href: '/form', icon: Mail },
+    { name: 'Contato', href: '/contato', icon: Mail },
   ];
 
   const linkClass = (href: string) =>

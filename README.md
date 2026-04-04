@@ -1,94 +1,218 @@
-# Café Bugado - Site Oficial
+# Café Bugado — Site Oficial
 
-Este repositório contém o código-fonte do site oficial do **Café Bugado**, uma comunidade descontraída para desenvolvedores que compartilham códigos, bugs e muito café.
+Site oficial da comunidade **Café Bugado**, um espaço para desenvolvedores, designers e entusiastas de tecnologia que querem aprender, compartilhar e crescer juntos — com muito café e zero formalidade.
 
-## ✨ Funcionalidades
-- Página inicial com animações e efeitos de luz interativos
-- Seções dedicadas para features, eventos, comunidade, blog e contato
-- Formulário de contato com feedback visual de envio
-- Alternância entre tema claro e escuro
-- Layout responsivo construído com Tailwind CSS
+---
 
-## 🛠️ Tecnologias
-- [React](https://react.dev) + [Vite](https://vitejs.dev)
-- [TypeScript](https://www.typescriptlang.org)
-- [Tailwind CSS](https://tailwindcss.com)
-- [lucide-react](https://lucide.dev) para ícones
+## Tecnologias
 
-## 📂 Estrutura de Pastas
+| Camada | Tecnologia |
+|---|---|
+| Framework | React 18 + TypeScript |
+| Build | Vite 5 |
+| Roteamento | TanStack Router v1 |
+| Estilização | Tailwind CSS v3 |
+| Ícones | Lucide React |
+| Banco de dados | Supabase (eventos) |
+| E-mail | Resend |
+| Notificações | Sonner |
+| Validação | Zod |
+| Deploy | Vercel |
+| Gerenciador de pacotes | pnpm |
+
+---
+
+## Estrutura do projeto
+
 ```
 src/
 ├── components/
-│   ├── layout/      # Cabeçalho, rodapé e toggle de tema
-│   └── home/        # Seções da página inicial (Hero, Eventos, Blog…)
-├── context/         # Provedor de tema
-├── App.tsx          # Composição das seções
-├── main.tsx         # Entrada da aplicação
-└── index.css        # Estilos globais
+│   ├── home/
+│   │   ├── Hero.tsx          # Seção principal com animações e terminal
+│   │   ├── Features.tsx      # Cards de funcionalidades da comunidade
+│   │   └── Events.tsx        # Listagem de eventos via Supabase
+│   ├── layout/
+│   │   ├── Header.tsx        # Navegação desktop + mobile bottom bar
+│   │   ├── Footer.tsx        # Rodapé com links e redes sociais
+│   │   └── ThemeToggle.tsx   # Botão de alternância light/dark
+│   └── ui/
+│       ├── Button.tsx
+│       ├── LinkButton.tsx
+│       └── index.ts
+├── context/
+│   └── ThemeContext.tsx       # Contexto de tema (light/dark)
+├── lib/
+│   └── supabase.ts            # Cliente Supabase configurado
+├── pages/
+│   ├── Home.tsx               # Página inicial
+│   ├── EventsPage.tsx         # Página de eventos (/eventos)
+│   ├── ContactPage.tsx        # Página de contato (/contato)
+│   └── NotFound.tsx           # Página 404
+├── tokens/
+│   └── index.ts               # Design tokens
+└── main.tsx                   # Entry point + definição de rotas
 ```
 
-## 🚀 Começando
+---
+
+## Rotas
+
+| Rota | Componente | Descrição |
+|---|---|---|
+| `/` | `Home` | Página inicial com Hero e Features |
+| `/eventos` | `EventsPage` | Listagem de eventos futuros da comunidade |
+| `/contato` | `ContactPage` | Formulário de contato |
+| `*` | `NotFound` | Página 404 personalizada |
+
+---
+
+## Variáveis de ambiente
+
+Copie o arquivo de exemplo e preencha os valores:
+
+```bash
+cp .env.example .env
+```
+
+```env
+# Resend — envio de e-mails do formulário de contato
+RESEND_API_KEY=sua_chave_aqui
+CONTACT_TO_EMAIL=seu_email@gmail.com
+CONTACT_FROM_EMAIL=Nome do Projeto <onboarding@resend.dev>
+
+# Supabase — projeto agendas_eventos (somente leitura)
+VITE_SUPABASE_URL=sua_url_aqui
+VITE_SUPABASE_ANON_KEY=sua_chave_anon_aqui
+
+# URL base da plataforma de eventos
+VITE_EVENTOS_BASE_URL=https://eventos.cafebugado.com.br
+```
+
+> Nunca commite o arquivo `.env`. Ele já está no `.gitignore`.
+
+---
+
+## Integração de Eventos (Supabase)
+
+Os eventos são lidos diretamente do banco de dados Supabase do projeto **agendas_eventos** usando a `anon key` (somente leitura). Nenhuma escrita é realizada por esta aplicação.
+
+### Tabelas consumidas
+
+| Tabela | Descrição |
+|---|---|
+| `eventos` | Dados do evento: nome, data, horário, imagem, modalidade, cidade etc. |
+| `tags` | Categorias dos eventos (nome e cor) |
+| `evento_tags` | Relação N:N entre eventos e tags |
+
+### Comportamento na página `/eventos`
+
+- Exibe apenas eventos **futuros** (a partir de hoje), ordenados pela data mais próxima
+- Mostra **9 eventos** por vez
+- Badge dinâmico na imagem do card: **Hoje** (pulsando) / **Amanhã** / **dia da semana** (para eventos em até 6 dias)
+- Eventos sem tags recebem automaticamente a tag **Tech**
+- Cada card redireciona para `eventos.cafebugado.com.br/eventos/{id}`
+- O botão "Ver mais eventos" redireciona para `eventos.cafebugado.com.br/eventos`
+
+---
+
+## Como rodar localmente
+
 ### Pré-requisitos
+
 - Node.js 18+
-- npm
+- pnpm
 
 ### Instalação
-```
-npm install
+
+```bash
+pnpm install
 ```
 
-### Ambiente de desenvolvimento
+### Desenvolvimento
+
+```bash
+pnpm dev
 ```
-npm run dev
-```
-A aplicação estará disponível em `http://localhost:5173` por padrão.
+
+Acesse em `http://localhost:5173`.
 
 ### Build de produção
+
+```bash
+pnpm build
 ```
-npm run build
-```
-O build final será gerado na pasta `dist/`.
 
 ### Pré-visualização do build
-```
-npm run preview
+
+```bash
+pnpm preview
 ```
 
 ### Lint
+
+```bash
+pnpm lint
 ```
-npm run lint
+
+---
+
+## CI/CD e fluxo de desenvolvimento
+
+### Branches
+
+| Branch | Finalidade |
+|---|---|
+| `prod` | Produção (deploy automático na Vercel) |
+| `dev` | Desenvolvimento / homologação (preview na Vercel) |
+
+### Fluxo de uma feature
+
+```bash
+# Partir sempre de dev atualizado
+git checkout dev && git pull
+git checkout -b feature/minha-feature
+
+# Após desenvolver, validar localmente
+pnpm lint && pnpm build
+
+# Subir a branch e abrir PR para dev
+git push -u origin feature/minha-feature
 ```
 
-## 🤝 Contribuindo
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests com melhorias ou correções.
+- PR para `dev` → gera preview na Vercel
+- PR de `dev` para `prod` → deploy em produção (exige 1 aprovação + CI verde)
 
-## 📄 Licença
-Este projeto ainda não possui uma licença definida. Entre em contato com os mantenedores para mais informações.
+### Hotfix
 
-
-## CI/CD e Fluxo de Desenvolvimento
-
-- Branches: `prod` (padrão, produção) e `dev` (homologação). Crie features a partir de `dev`; hotfixes a partir de `prod`.
-- Como começar uma feature: `git checkout dev && git pull && git checkout -b feature/minha-feature`. Desenvolva, rode `npm run lint && npm run build`, abra PR para `dev` (1 aprovação obrigatória). O workflow `CI` roda lint/build; se ok, faça merge via PR.
-- Deploy de homologação: merge/push em `dev` aciona `Deploy` no GitHub Actions, publica preview na Vercel.
-- Promover para produção: abra PR de `dev` para `prod` (ou `git checkout prod && git pull && git merge --no-ff dev`). Exige 1 aprovação + CI. Ao merge em `prod`, o `Deploy` publica produção na Vercel.
-- Hotfix: `git checkout prod && git pull && git checkout -b hotfix/descricao`; PR para `prod`, depois back-merge de `prod` para `dev`.
+```bash
+git checkout prod && git pull
+git checkout -b hotfix/descricao
+# Corrigir, abrir PR para prod
+# Após merge, fazer back-merge de prod para dev
+```
 
 ### Workflows GitHub Actions
-- `.github/workflows/ci.yml`: `npm ci`, `npm run lint`, `npm run build` em push/PR para `dev` e `prod`.
-- `.github/workflows/deploy.yml`: mesmo setup e deploy com `amondnet/vercel-action@v25`; branch `dev` gera preview, `prod` gera deploy de produção (controle via `prod: ${{ github.ref == 'refs/heads/prod' }}`).
 
-### Secrets obrigatórias (GitHub → Settings → Secrets and variables → Actions)
+| Workflow | Gatilho | O que faz |
+|---|---|---|
+| `ci.yml` | Push/PR em `dev` e `prod` | `pnpm install`, lint, build |
+| `deploy.yml` | Push em `dev` ou `prod` | Deploy na Vercel (preview ou produção) |
+
+### Secrets obrigatórias (GitHub → Settings → Secrets)
+
 - `VERCEL_TOKEN`
 - `VERCEL_ORG_ID`
 - `VERCEL_PROJECT_ID`
 
-### Env local
-- Copie `.env.example` para `.env` e preencha os valores (não comitar `.env`).
+---
 
-### Resumo de comandos
-- Criar feature: `git checkout dev && git pull && git checkout -b feature/minha-feature`
-- Validar local: `npm run lint && npm run build`
-- Subir branch: `git push -u origin feature/minha-feature`
-- PR para dev → preview; PR para prod → produção
+## Comunidade
 
+Entre pelo canal que preferir:
+
+- [Discord](https://discord.gg/FkDb6PxH)
+- [WhatsApp](https://chat.whatsapp.com/CSma4uQURpSFsTpQSS6m9V)
+- [Telegram](https://t.me/jornadati/58)
+- [LinkedIn](https://www.linkedin.com/company/cafebugado)
+- [GitHub](https://github.com/cafebugado)
+- [E-mail](mailto:comunidade.cafebugado@gmail.com)

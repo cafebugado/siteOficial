@@ -53,7 +53,7 @@ const ContactForm = () => {
                   <h2 className="text-xl font-semibold mb-2">Discord</h2>
                   <p className="text-gray-700 dark:text-gray-200">Entre no servidor para conversar ao vivo.</p>
                   <a
-                    href="https://discord.gg/9pMEAthj"
+                    href="https://discord.gg/vm4DgYpz2m"
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex mt-4 items-center justify-center px-4 py-2 rounded-lg bg-gray-800 text-white font-medium hover:bg-gray-700 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white transition-all"

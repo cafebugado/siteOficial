@@ -133,7 +133,7 @@ export default function Footer() {
               Dúvidas, sugestões ou ideias malucas? Estamos aqui pra ouvir você. Bora conversar!
             </p>
             <a
-              href="/form"
+              href="/contato"
               className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-primary text-white text-sm font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
             >
               Enviar mensagem
@@ -151,6 +151,7 @@ export default function Footer() {
           <p>© {currentYear} Café Bugado</p>
         </div>
       </div>
+
       {/* Botão voltar ao topo */}
       {showScrollTop && (
         <button

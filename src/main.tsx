@@ -4,7 +4,7 @@ import Home from './pages/Home.tsx';
 import Events from './pages/Events.tsx';
 import Community from './pages/Community.tsx';
 import Blog from './pages/Blog.tsx';
-import ContactForm from './pages/ContactForm.tsx';
+import ContactPage from './pages/ContactPage.tsx';
 import Challenges from './pages/Challenges.tsx';
 import CommunityPage from './pages/CommunityPage.tsx';
 import MemberProfilePage from './pages/MemberProfilePage.tsx';
@@ -20,9 +20,13 @@ const root = createRoot(rootElement);
 const path = window.location.pathname;
 
 const getPage = () => {
-  if (path === '/form') return <ContactForm />;
+  if (path === '/contato') return <ContactPage />;
 
   const PageContent = () => {
+    if (path.startsWith('/comunidade/')) {
+      const id = path.replace('/comunidade/', '');
+      return <MemberProfilePage id={id} />;
+    }
     switch (path) {
       case '/eventos':
         return <Events />;
@@ -34,10 +38,6 @@ const getPage = () => {
         return <Challenges />;
       case '/':
       default:
-        if (path.startsWith('/comunidade/')) {
-          const id = path.replace('/comunidade/', '');
-          return <MemberProfilePage id={id} />;
-        }
         return <Home />;
     }
   };

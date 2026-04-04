@@ -773,6 +773,49 @@ className="px-4 sm:px-6 lg:px-8"  // Espaçamento responsivo
 className="gap-4 sm:gap-6 lg:gap-8"  // Gap responsivo
 ```
 
+### Padrões Mobile Estabelecidos
+
+| Contexto | Mobile | Desktop |
+|----------|--------|---------|
+| Fonte de seção | `text-sm` | `text-base` ou maior |
+| Título de seção | `text-2xl` | `text-4xl` |
+| Texto justificado | `text-justify` | `text-left` ou `text-center` |
+| Layout de cards | ícone + título na mesma linha | ícone + título na mesma linha |
+| Footer | apenas copyright | conteúdo completo |
+| Navegação | barra flutuante no bottom | menu horizontal no header |
+
+### Ocultação por Breakpoint (padrão do projeto)
+
+```tsx
+// Visível apenas no desktop
+className="hidden md:block"
+className="hidden md:flex"
+
+// Visível apenas no mobile
+className="md:hidden"
+className="block md:hidden"
+
+// Texto diferente por breakpoint
+<span className="hidden md:inline">Texto completo para desktop</span>
+<span className="md:hidden">Texto curto</span>
+```
+
+### Navegação Mobile
+
+A barra de navegação mobile é um pill flutuante (`fixed bottom-4`) com:
+- Ícone + nome para cada item
+- Cadeado no canto superior direito dos itens "Em breve"
+- Tooltip "Em breve" ao toque (some após 2s)
+- `pb-24` no Footer para não sobrepor o conteúdo
+
+```tsx
+<nav className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-sm">
+  <div className="bg-white/90 dark:bg-dark-card/90 backdrop-blur-lg border ... rounded-2xl shadow-xl px-2 py-2 flex items-center justify-around">
+    {/* itens */}
+  </div>
+</nav>
+```
+
 ## 📋 Guia de Uso de Botões
 
 ### Quando usar cada variante:
@@ -899,7 +942,44 @@ Em uma mesma tela/seção:
 - Badges com cores arbitrárias (use as cores específicas)
 - Navbar com altura variável (sempre `h-16` = 64px)
 
+## 🖱️ Scrollbar Customizada
+
+A barra de scroll é estilizada globalmente em `index.css`:
+
+```css
+/* Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #8B5CF6; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #6D28D9; }
+
+/* Firefox */
+* { scrollbar-width: thin; scrollbar-color: #8B5CF6 transparent; }
+```
+
+- **Largura:** 4px (fina)
+- **Cor:** `cb-purple` (#8B5CF6), hover em `cb-purple-dark` (#6D28D9)
+- **Track:** transparente
+- **Bordas:** pílula (`border-radius: 999px`)
+
+## 🌗 Background Global
+
+O background é aplicado diretamente no `html` via CSS para evitar flash branco antes do React carregar:
+
+```css
+html {
+  background-color: var(--light-bg); /* #F8F8FA */
+  color: var(--light-text);
+}
+html.dark {
+  background-color: var(--dark-bg); /* #0F0F12 */
+  color: var(--dark-text);
+}
+```
+
+O tema dark é ativado adicionando a classe `dark` ao elemento `html` via `ThemeContext`.
+
 ---
 
-**Última atualização:** 2025-12-03
-**Versão:** 1.1.0
+**Última atualização:** 2026-02-22
+**Versão:** 1.2.0
