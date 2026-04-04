@@ -1,32 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Github, Linkedin, Mail, Heart, Lock, ArrowUp } from 'lucide-react';
-import { useRouter, Link } from '@tanstack/react-router';
-import { ContactModal } from '../ui';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => setShowScrollTop(window.scrollY > 300);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const handleEnviarMensagem = () => {
-    const isOnContato = router.state.location.pathname === '/contato';
-    if (isOnContato) {
-      const formHeading = document.getElementById('fale-com-a-comunidade');
-      if (formHeading) {
-        formHeading.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        formHeading.focus();
-      }
-    } else {
-      setIsModalOpen(true);
-    }
-  };
 
   return (
     <footer className="relative bg-gray-50 dark:bg-gray-900 pt-10 pb-24 md:pt-16 md:pb-10 overflow-hidden">
@@ -93,12 +76,12 @@ export default function Footer() {
               ].map(item => (
                 <li key={item.name}>
                   {item.href ? (
-                    <Link
-                      to={item.href}
+                    <a
+                      href={item.href}
                       className="text-gray-600 hover:text-cb-purple dark:text-gray-400 dark:hover:text-cb-purple transition-colors"
                     >
                       {item.name}
-                    </Link>
+                    </a>
                   ) : (
                     <span className="group inline-flex items-center gap-1.5 text-gray-400 dark:text-gray-600 cursor-default select-none">
                       {item.name}
@@ -149,12 +132,12 @@ export default function Footer() {
               Fala com a gente! <br />
               Dúvidas, sugestões ou ideias malucas? Estamos aqui pra ouvir você. Bora conversar!
             </p>
-            <button
-              onClick={handleEnviarMensagem}
+            <a
+              href="/form"
               className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-primary text-white text-sm font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
             >
               Enviar mensagem
-            </button>
+            </a>
           </div>
         </div>
 
@@ -168,8 +151,6 @@ export default function Footer() {
           <p>© {currentYear} Café Bugado</p>
         </div>
       </div>
-      <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-
       {/* Botão voltar ao topo */}
       {showScrollTop && (
         <button

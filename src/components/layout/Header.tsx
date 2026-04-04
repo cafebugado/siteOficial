@@ -1,18 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Home, Calendar, Zap, BookOpen, Users, Mail, Lock } from 'lucide-react';
-import { Link, useRouterState } from '@tanstack/react-router';
 import ThemeToggle from './ThemeToggle';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
-  const routerState = useRouterState();
-  const currentPath = routerState.location.pathname;
+  const currentPath = window.location.pathname;
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -23,7 +19,7 @@ export default function Header() {
     { name: 'Desafios', href: '#', badge: 'Em breve', icon: Zap },
     { name: 'Blog', href: '#', badge: 'Em breve', icon: BookOpen },
     { name: 'Comunidade', href: '/comunidade', icon: Users },
-    { name: 'Contato', href: '/contato', icon: Mail },
+    { name: 'Contato', href: '/form', icon: Mail },
   ];
 
   const linkClass = (href: string) =>
@@ -46,12 +42,12 @@ export default function Header() {
         <div className="container mx-auto px-4 py-3 md:py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2 group">
+            <a href="/" className="flex items-center space-x-2 group">
               <img src="/logo.png" alt="Café Bugado" className="w-10 h-10 rounded-lg shadow-lg object-contain" />
               <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-primary">
                 Café Bugado
               </span>
-            </Link>
+            </a>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8">
@@ -69,7 +65,7 @@ export default function Header() {
                     {item.name}
                     <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-cb-purple group-hover:w-full transition-all duration-300"></span>
                   </a>
-                ) : item.href.includes('#') ? (
+                ) : (
                   <a
                     key={item.name}
                     href={item.href}
@@ -78,15 +74,6 @@ export default function Header() {
                     {item.name}
                     <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-cb-purple group-hover:w-full transition-all duration-300"></span>
                   </a>
-                ) : (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className={linkClass(item.href)}
-                  >
-                    {item.name}
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-cb-purple group-hover:w-full transition-all duration-300"></span>
-                  </Link>
                 )
               )}
             </nav>
@@ -128,23 +115,10 @@ export default function Header() {
               );
             }
 
-            if (item.href.includes('#')) {
-              return (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="relative flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl transition-all text-cb-gray-dark dark:text-cb-gray hover:text-cb-purple dark:hover:text-cb-purple hover:bg-cb-purple/10"
-                >
-                  <Icon className="w-5 h-5" />
-                  <span className="text-[10px] font-medium leading-none">{item.name}</span>
-                </a>
-              );
-            }
-
             return (
-              <Link
+              <a
                 key={item.name}
-                to={item.href}
+                href={item.href}
                 className={`relative flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl transition-all ${
                   isActive
                     ? 'text-cb-purple bg-cb-purple/10'
@@ -153,7 +127,7 @@ export default function Header() {
               >
                 <Icon className="w-5 h-5" />
                 <span className="text-[10px] font-medium leading-none">{item.name}</span>
-              </Link>
+              </a>
             );
           })}
         </div>
