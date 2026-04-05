@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Github, Linkedin, MapPin, Search, Filter, ExternalLink, MessageCircle } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 import { supabaseCommunity } from '../lib/supabaseCommunity'
 
 interface Member {
@@ -120,7 +121,11 @@ function MemberCard({ member }: { member: Member }) {
   return (
     <div className="relative group">
       <div className="absolute -inset-0.5 bg-gradient-primary rounded-xl blur opacity-0 group-hover:opacity-60 transition duration-500 pointer-events-none" />
-      <div className="relative flex flex-col h-full p-5 bg-light-card dark:bg-dark-card rounded-xl border border-cb-gray-light dark:border-[#26262C] transition-all duration-300">
+      <Link
+        to="/comunidade/$id"
+        params={{ id: member.id }}
+        className="relative flex flex-col h-full p-5 bg-light-card dark:bg-dark-card rounded-xl border border-cb-gray-light dark:border-[#26262C] transition-all duration-300 cursor-pointer"
+      >
 
         {/* Avatar + nome */}
         <div className="flex items-center gap-3 mb-4">
@@ -155,6 +160,7 @@ function MemberCard({ member }: { member: Member }) {
               href={member.linkedin_url}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
               className="text-cb-gray-dark dark:text-cb-gray hover:text-cb-purple dark:hover:text-cb-purple transition-colors"
               aria-label={`LinkedIn de ${member.full_name}`}
             >
@@ -166,6 +172,7 @@ function MemberCard({ member }: { member: Member }) {
               href={member.github_url}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
               className="text-cb-gray-dark dark:text-cb-gray hover:text-cb-purple dark:hover:text-cb-purple transition-colors"
               aria-label={`GitHub de ${member.full_name}`}
             >
@@ -177,6 +184,7 @@ function MemberCard({ member }: { member: Member }) {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
               className="text-cb-gray-dark dark:text-cb-gray hover:text-green-500 dark:hover:text-green-400 transition-colors"
               aria-label={`WhatsApp de ${member.full_name}`}
             >
@@ -188,6 +196,7 @@ function MemberCard({ member }: { member: Member }) {
               href={member.portfolio_url}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
               className="flex items-center gap-1 text-xs font-medium text-cb-gray-dark dark:text-cb-gray hover:text-cb-purple dark:hover:text-cb-purple transition-colors ml-auto"
               aria-label={`Portfólio de ${member.full_name}`}
             >
@@ -196,7 +205,7 @@ function MemberCard({ member }: { member: Member }) {
             </a>
           )}
         </div>
-      </div>
+      </Link>
     </div>
   )
 }

@@ -12,6 +12,7 @@ import Home from './pages/Home.tsx';
 import ContactPage from './pages/ContactPage.tsx';
 import EventsPage from './pages/EventsPage.tsx';
 import CommunityPage from './pages/CommunityPage.tsx';
+import MemberProfile from './pages/MemberProfile.tsx';
 import NotFound from './pages/NotFound.tsx';
 import { ThemeProvider } from './context/ThemeContext';
 import { Analytics } from '@vercel/analytics/react';
@@ -77,7 +78,13 @@ const comunidadeRoute = createRoute({
   component: CommunityPage,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, contatoRoute, eventosRoute, comunidadeRoute, notFoundRoute]);
+const membroRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/comunidade/$id',
+  component: MemberProfile,
+});
+
+const routeTree = rootRoute.addChildren([indexRoute, contatoRoute, eventosRoute, comunidadeRoute, membroRoute, notFoundRoute]);
 
 const router = createRouter({ routeTree });
 
