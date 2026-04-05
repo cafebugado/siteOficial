@@ -250,9 +250,9 @@ export default function CommunityPage() {
           <p className="text-large text-cb-gray-dark dark:text-cb-gray max-w-2xl mx-auto">
             Conheça os membros que fazem parte do Café Bugado — desenvolvedores, designers e profissionais de tecnologia de todo o Brasil.
           </p>
-          {!loading && (
+          {!loading && members.length >= 50 && (
             <p className="mt-2 text-sm text-cb-gray-dark dark:text-cb-gray">
-              {members.length} {members.length === 1 ? 'membro cadastrado' : 'membros cadastrados'}
+              {members.length} membros cadastrados
             </p>
           )}
           <a
