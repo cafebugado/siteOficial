@@ -11,6 +11,7 @@ import {
 import Home from './pages/Home.tsx';
 import ContactPage from './pages/ContactPage.tsx';
 import EventsPage from './pages/EventsPage.tsx';
+import CommunityPage from './pages/CommunityPage.tsx';
 import NotFound from './pages/NotFound.tsx';
 import { ThemeProvider } from './context/ThemeContext';
 import { Analytics } from '@vercel/analytics/react';
@@ -70,7 +71,13 @@ const notFoundRoute = createRoute({
   component: NotFound,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, contatoRoute, eventosRoute, notFoundRoute]);
+const comunidadeRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/comunidade',
+  component: CommunityPage,
+});
+
+const routeTree = rootRoute.addChildren([indexRoute, contatoRoute, eventosRoute, comunidadeRoute, notFoundRoute]);
 
 const router = createRouter({ routeTree });
 

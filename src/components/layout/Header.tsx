@@ -22,7 +22,7 @@ export default function Header() {
     { name: 'Eventos', href: '/eventos', icon: Calendar },
     { name: 'Desafios', href: '#', badge: 'Em breve', icon: Zap },
     { name: 'Blog', href: '#', badge: 'Em breve', icon: BookOpen },
-    { name: 'Comunidade', href: '#', badge: 'Em breve', icon: Users },
+    { name: 'Comunidade', href: '/comunidade', icon: Users },
     { name: 'Contato', href: '/contato', icon: Mail },
   ];
 
