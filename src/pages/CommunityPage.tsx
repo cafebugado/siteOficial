@@ -255,10 +255,18 @@ export default function CommunityPage() {
               {members.length} {members.length === 1 ? 'membro cadastrado' : 'membros cadastrados'}
             </p>
           )}
+          <a
+            href="https://talentos.cafebugado.com.br/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-primary text-white font-medium hover:shadow-lg hover:shadow-cb-purple/20 transition-all hover:-translate-y-0.5"
+          >
+            Quero fazer parte da comunidade
+          </a>
         </div>
 
-        {/* Search + Filters */}
-        <div className="mb-8 space-y-4">
+        {/* Search + Filters — só exibe com 50+ membros */}
+        {members.length >= 50 && <div className="mb-8 space-y-4">
           <div className="flex gap-3">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-cb-gray-dark dark:text-cb-gray" />
@@ -328,7 +336,7 @@ export default function CommunityPage() {
               )}
             </div>
           )}
-        </div>
+        </div>}
 
         {/* Content */}
         {loading ? (
