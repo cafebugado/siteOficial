@@ -67,7 +67,7 @@ function Avatar({ member }: { member: Member }) {
         src={avatarUrl}
         alt={member.full_name}
         onError={() => setImgError(true)}
-        className="w-28 h-28 rounded-full object-cover border-4 border-light-card dark:border-dark-card shadow-lg"
+        className="w-28 h-28 rounded-full object-cover border-4 border-light-card dark:border-dark-card shadow-lg relative"
       />
     )
   }
