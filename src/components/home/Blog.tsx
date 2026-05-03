@@ -1,4 +1,3 @@
-import React from 'react';
 import { Clock, User, ArrowRight, Tag } from 'lucide-react';
 
 interface BlogCardProps {

@@ -1,4 +1,4 @@
-import { Code2, Zap, Target, Server, LucideIcon } from 'lucide-react';
+import { Code2, Target, Server, LucideIcon } from 'lucide-react';
 
 export interface Challenge {
   id: number;

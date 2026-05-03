@@ -179,7 +179,7 @@ const PAGE_SIZE = 9;
 
 export default function Events() {
   const [events, setEvents] = useState<Evento[]>([]);
-  const [visible, setVisible] = useState(PAGE_SIZE);
+  const [visible] = useState(PAGE_SIZE);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -195,7 +195,7 @@ export default function Events() {
         if (tagsRes.error) throw tagsRes.error;
 
         const tagsMap: Record<string, Tag[]> = {};
-        for (const row of tagsRes.data as { evento_id: string; tags: Tag }[]) {
+        for (const row of tagsRes.data as unknown as { evento_id: string; tags: Tag }[]) {
           if (!tagsMap[row.evento_id]) tagsMap[row.evento_id] = [];
           tagsMap[row.evento_id].push(row.tags);
         }

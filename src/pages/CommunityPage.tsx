@@ -76,14 +76,6 @@ function getWhatsappUrl(phone: string | null): string | null {
   return `https://wa.me/55${digits}`
 }
 
-function availabilityColor(availability: string | null) {
-  if (!availability) return null
-  if (availability === 'Disponível para trabalho')
-    return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-  if (availability === 'Aberto a oportunidades')
-    return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-  return 'bg-cb-gray-light text-cb-gray-dark dark:bg-[#26262C] dark:text-cb-gray'
-}
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
