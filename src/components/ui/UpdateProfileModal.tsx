@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { X, ArrowRight, ArrowLeft, CheckCircle, UserPen } from 'lucide-react'
+import { X, ArrowRight, ArrowLeft, CheckCircle, UserCog } from 'lucide-react'
 import { z } from 'zod'
 import { toast } from 'sonner'
 
@@ -197,7 +197,7 @@ export default function UpdateProfileModal({ isOpen, onClose }: Props) {
                 )}
                 <div>
                   <h2 className="text-lg font-bold text-light-text dark:text-dark-text flex items-center gap-2">
-                    <UserPen className="w-5 h-5 text-cb-purple" />
+                    <UserCog className="w-5 h-5 text-cb-purple" />
                     Atualizar perfil
                   </h2>
                   <p className="text-xs text-cb-gray mt-0.5">
