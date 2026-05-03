@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Github, Linkedin, MapPin, Search, Filter, ExternalLink, MessageCircle } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { supabaseCommunity } from '../lib/supabaseCommunity'
+import UpdateProfileModal from '../components/ui/UpdateProfileModal'
 
 interface Member {
   id: string
@@ -217,6 +218,7 @@ export default function CommunityPage() {
   const [filterArea, setFilterArea] = useState('Todos')
   const [filterLevel, setFilterLevel] = useState('Todos')
   const [showFilters, setShowFilters] = useState(false)
+  const [updateModalOpen, setUpdateModalOpen] = useState(false)
 
   useEffect(() => {
     async function fetchMembers() {
@@ -264,14 +266,22 @@ export default function CommunityPage() {
               {members.length} membros cadastrados
             </p>
           )}
-          <a
-            href="https://talentos.cafebugado.com.br/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-primary text-white font-medium hover:shadow-lg hover:shadow-cb-purple/20 transition-all hover:-translate-y-0.5"
-          >
-            Quero fazer parte da comunidade
-          </a>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href="https://talentos.cafebugado.com.br/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-primary text-white font-medium hover:shadow-lg hover:shadow-cb-purple/20 transition-all hover:-translate-y-0.5"
+            >
+              Quero fazer parte da comunidade
+            </a>
+            <button
+              onClick={() => setUpdateModalOpen(true)}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-cb-purple text-cb-purple font-medium hover:bg-cb-purple/10 transition-all hover:-translate-y-0.5"
+            >
+              Atualizar meu perfil
+            </button>
+          </div>
         </div>
 
         {/* Search + Filters — só exibe com 50+ membros */}
@@ -346,6 +356,8 @@ export default function CommunityPage() {
             </div>
           )}
         </div>}
+
+        <UpdateProfileModal isOpen={updateModalOpen} onClose={() => setUpdateModalOpen(false)} />
 
         {/* Content */}
         {loading ? (
