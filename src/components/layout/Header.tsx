@@ -46,8 +46,8 @@ export default function Header() {
         <div className="container mx-auto px-4 py-3 md:py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2 group">
-              <img src="/logo.png" alt="Café Bugado" className="w-10 h-10 rounded-lg shadow-lg object-contain" />
+            <Link to="/" className="flex items-center space-x-2.5 group">
+              <img src="/logoElemento.png" alt="Café Bugado" className="w-10 h-10 object-contain transition-transform duration-200 group-hover:scale-105" />
               <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-primary">
                 Café Bugado
               </span>

@@ -61,6 +61,19 @@ const ContactForm = () => {
                     Abrir Discord
                   </a>
                 </div>
+
+                <div className="p-5 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-center">
+                  <h2 className="text-xl font-semibold mb-2">Instagram</h2>
+                  <p className="text-gray-700 dark:text-gray-200">Acompanhe novidades, eventos e bastidores.</p>
+                  <a
+                    href="https://www.instagram.com/comunidadecafebugado/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex mt-4 items-center justify-center px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 text-white font-medium hover:opacity-90 transition-all"
+                  >
+                    Seguir no Instagram
+                  </a>
+                </div>
               </div>
 
               <div className="lg:col-span-2">

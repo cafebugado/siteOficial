@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail, MapPin, ArrowRight } from 'lucide-react';
+import { Mail, MapPin, ArrowRight, Instagram } from 'lucide-react';
 import { z } from 'zod';
 import { toast } from 'sonner';
 
@@ -99,6 +99,13 @@ export default function Contact() {
       value: '+55 11 96188-9886',
       href: 'https://wa.me/5511961889886',
       description: 'Canal direto para falar com a comunidade e tirar dúvidas rápidas. Seg a sex, das 9h às 18h.',
+    },
+    {
+      icon: <Instagram className="w-5 h-5 text-cb-purple" />,
+      label: 'Instagram',
+      value: '@comunidadecafebugado',
+      href: 'https://www.instagram.com/comunidadecafebugado/',
+      description: 'Siga nossa página para acompanhar conteúdos, eventos e bastidores.',
     },
     {
       icon: <MapPin className="w-5 h-5 text-cb-purple" />,
