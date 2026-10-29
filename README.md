@@ -211,7 +211,8 @@ git checkout -b hotfix/descricao
 Entre pelo canal que preferir:
 
 - [Discord](https://discord.gg/FkDb6PxH)
-- [WhatsApp](https://chat.whatsapp.com/CSma4uQURpSFsTpQSS6m9V)
+- [WhatsApp](https://chat.whatsapp.com/C5hik5kZQuc5JoJlK2l733)
+- [Instagram](https://www.instagram.com/comunidadecafebugado/)
 - [Telegram](https://t.me/jornadati/58)
 - [LinkedIn](https://www.linkedin.com/company/cafebugado)
 - [GitHub](https://github.com/cafebugado)
