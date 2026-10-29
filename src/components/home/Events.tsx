@@ -179,7 +179,7 @@ const PAGE_SIZE = 9;
 
 export default function Events() {
   const [events, setEvents] = useState<Evento[]>([]);
-  const [visible, setVisible] = useState(PAGE_SIZE);
+  const visible = PAGE_SIZE;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
